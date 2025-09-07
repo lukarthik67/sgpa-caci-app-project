@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA Calculator - Academic Performance Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'inter': ['Inter', 'sans-serif'],
+                },
+                colors: {
+                    primary: '#3B82F6',
+                    secondary: '#10B981',
+                    accent: '#F59E0B',
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-inter">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <div class="flex items-center space-x-3">
+                <div class="bg-primary text-white p-2 rounded-lg">
+                    <i class="fas fa-graduation-cap text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">SGPA Calculator</h1>
+                    <p class="text-sm text-gray-600">Track your academic performance with ease</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Indicator -->
+    <div class="max-w-4xl mx-auto px-4 py-6">
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-sm font-medium text-gray-600">Progress</span>
+                <span class="text-sm font-medium text-primary" id="progress-text">Step 1 of 4</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-primary h-2 rounded-full transition-all duration-500 ease-in-out" style="width: 25%" id="progress-bar"></div>
+            </div>
+            <div class="flex justify-between mt-3 text-xs text-gray-500">
+                <span>Personal Info</span>
+                <span>Subjects</span>
+                <span>Results</span>
+                <span>Final Score</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 pb-8">
+        
+        <!-- Stage 1: Personal Information -->
+        <div id="stage-1" class="stage-container">
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <div class="text-center mb-8">
+                    <div class="bg-blue-100 text-primary p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Let's Get Started!</h2>
+                    <p class="text-gray-600">Tell us a bit about yourself to personalize your experience</p>
+                </div>
+
+                <form class="space-y-6 max-w-md mx-auto">
+                    <div>
+                        <label for="student-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="student-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="gender" value="male" class="text-primary focus:ring-primary">
+                                <span class="ml-3 text-sm font-medium text-gray-700">Male</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="gender" value="female" class="text-primary focus:ring-primary">
+                                <span class="ml-3 text-sm font-medium text-gray-700">Female</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="gender" value="others" class="text-primary focus:ring-primary">
+                                <span class="ml-3 text-sm font-medium text-gray-700">Others</span>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input type="radio" name="gender" value="prefer-not-to-say" class="text-primary focus:ring-primary">
+                                <span class="ml-3 text-sm font-medium text-gray-700">Prefer not to say</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="nextStage()" class="w-full bg-primary text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2">
+                        <span>Continue</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stage 2: Subjects Input -->
+        <div id="stage-2" class="stage-container hidden">
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <div class="text-center mb-8">
+                    <div class="bg-green-100 text-secondary p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-book text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Subject Details</h2>
+                    <p class="text-gray-600">Enter your subjects and their respective marks & credits</p>
+                </div>
+
+                <!-- Number of Subjects -->
+                <div id="subjects-count-section" class="max-w-md mx-auto mb-8">
+                    <label for="num-subjects" class="block text-sm font-medium text-gray-700 mb-2">Number of Subjects</label>
+                    <input type="number" id="num-subjects" min="1" max="15" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors" placeholder="Enter number of subjects">
+                    <button type="button" onclick="generateSubjectFields()" class="w-full mt-4 bg-secondary text-white py-3 px-6 rounded-lg font-medium hover:bg-green-600 transition-colors">
+                        Generate Subject Fields
+                    </button>
+                </div>
+
+                <!-- Subject Fields Container -->
+                <div id="subjects-container" class="space-y-6 hidden">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Enter Subject Details</h3>
+                        <span class="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full" id="subjects-progress">0 of 0 completed</span>
+                    </div>
+                    
+                    <!-- Dynamic subject fields will be inserted here -->
+                    <div id="dynamic-subjects"></div>
+
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="previousStage()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-600 transition-colors flex items-center justify-center space-x-2">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>Back</span>
+                        </button>
+                        <button type="button" onclick="calculateResults()" class="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2">
+                            <span>Calculate SGPA</span>
+                            <i class="fas fa-calculator"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 3: Results Table -->
+        <div id="stage-3" class="stage-container hidden">
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <div class="text-center mb-8">
+                    <div class="bg-amber-100 text-accent p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Subject-wise Breakdown</h2>
+                    <p class="text-gray-600">Here's your detailed performance analysis</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                <th class="border border-gray-200 px-4 py-3 text-left font-semibold text-gray-700">Subject</th>
+                                <th class="border border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">Marks</th>
+                                <th class="border border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">Credits</th>
+                                <th class="border border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">Grade Points</th>
+                                <th class="border border-gray-200 px-4 py-3 text-center font-semibold text-gray-700">Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-table-body">
+                            <!-- Dynamic results will be inserted here -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-blue-50 font-semibold">
+                                <td class="border border-gray-200 px-4 py-3">TOTAL</td>
+                                <td class="border border-gray-200 px-4 py-3 text-center">-</td>
+                                <td class="border border-gray-200 px-4 py-3 text-center" id="total-credits">0</td>
+                                <td class="border border-gray-200 px-4 py-3 text-center" id="total-grade-points">0</td>
+                                <td class="border border-gray-200 px-4 py-3 text-center">-</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="flex space-x-4 mt-8">
+                    <button type="button" onclick="previousStage()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-600 transition-colors flex items-center justify-center space-x-2">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back</span>
+                    </button>
+                    <button type="button" onclick="nextStage()" class="flex-1 bg-primary text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center justify-center space-x-2">
+                        <span>View Final Results</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 4: Final Results -->
+        <div id="stage-4" class="stage-container hidden">
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <div class="text-center mb-8">
+                    <div class="bg-green-100 text-secondary p-4 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-trophy text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Congratulations!</h2>
+                    <p class="text-gray-600">Here are your final academic results</p>
+                </div>
+
+                <!-- SGPA Display -->
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl p-8 mb-8 text-center">
+                    <h3 class="text-lg font-medium mb-2">Your SGPA</h3>
+                    <div class="text-5xl font-bold mb-4" id="final-sgpa">0.00</div>
+                    <p class="text-blue-100">Semester Grade Point Average</p>
+                </div>
+
+                <!-- Student Info Summary -->
+                <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                    <h4 class="font-semibold text-gray-900 mb-4">Academic Summary</h4>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-600">Student:</span>
+                            <span class="font-medium ml-2" id="summary-name">-</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Total Subjects:</span>
+                            <span class="font-medium ml-2" id="summary-subjects">-</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Total Credits:</span>
+                            <span class="font-medium ml-2" id="summary-credits">-</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Grade Points Earned:</span>
+                            <span class="font-medium ml-2" id="summary-points">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivational Message -->
+                <div id="motivation-card" class="border-l-4 border-primary bg-blue-50 p-6 rounded-r-xl mb-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 text-2xl" id="motivation-emoji">🌟</div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2" id="motivation-title">Keep Going!</h4>
+                            <p class="text-gray-700" id="motivation-message">You're doing great! Keep up the excellent work.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4">
+                    <button type="button" onclick="previousStage()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-600 transition-colors flex items-center justify-center space-x-2">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Results</span>
+                    </button>
+                    <button type="button" onclick="startOver()" class="flex-1 bg-secondary text-white py-3 px-6 rounded-lg font-medium hover:bg-green-600 transition-colors flex items-center justify-center space-x-2">
+                        <i class="fas fa-redo"></i>
+                        <span>Calculate Again</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global variables
+        let currentStage = 1;
+        let studentData = {
+            name: '',
+            gender: '',
+            subjects: []
+        };
+
+        (function() {
+            // Stage management functions
+            window.nextStage = function() {
+                if (currentStage === 1) {
+                    const name = document.getElementById('student-name').value.trim();
+                    const gender = document.querySelector('input[name="gender"]:checked');
+                    
+                    if (!name || !gender) {
+                        alert('Please fill in all required fields.');
+                        return;
+                    }
+                    
+                    studentData.name = name;
+                    studentData.gender = gender.value;
+                }
+                
+                if (currentStage < 4) {
+                    currentStage++;
+                    updateStageDisplay();
+                }
+            };
+
+            window.previousStage = function() {
+                if (currentStage > 1) {
+                    currentStage--;
+                    updateStageDisplay();
+                }
+            };
+
+            function updateStageDisplay() {
+                // Hide all stages
+                document.querySelectorAll('.stage-container').forEach(stage => {
+                    stage.classList.add('hidden');
+                });
+                
+                // Show current stage
+                document.getElementById(`stage-${currentStage}`).classList.remove('hidden');
+                
+                // Update progress
+                const progress = (currentStage / 4) * 100;
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+                document.getElementById('progress-text').textContent = `Step ${currentStage} of 4`;
+            }
+
+            // Generate subject input fields
+            window.generateSubjectFields = function() {
+                const numSubjects = parseInt(document.getElementById('num-subjects').value);
+                
+                if (!numSubjects || numSubjects < 1 || numSubjects > 15) {
+                    alert('Please enter a valid number of subjects (1-15).');
+                    return;
+                }
+                
+                const container = document.getElementById('dynamic-subjects');
+                const subjectsContainer = document.getElementById('subjects-container');
+                
+                container.innerHTML = '';
+                
+                for (let i = 1; i <= numSubjects; i++) {
+                    const subjectDiv = document.createElement('div');
+                    subjectDiv.className = 'bg-gray-50 rounded-lg p-6';
+                    subjectDiv.innerHTML = `
+                        <h4 class="font-semibold text-gray-900 mb-4">Subject ${i}</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Subject Name</label>
+                                <input type="text" id="subject-name-${i}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="e.g., Mathematics" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Marks Obtained</label>
+                                <input type="number" id="subject-marks-${i}" min="0" max="100" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="0-100" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Credits</label>
+                                <input type="number" id="subject-credits-${i}" min="1" max="10" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary" placeholder="1-10" required>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(subjectDiv);
+                }
+                
+                document.getElementById('subjects-count-section').classList.add('hidden');
+                subjectsContainer.classList.remove('hidden');
+                
+                updateSubjectsProgress(numSubjects);
+            };
+
+            function updateSubjectsProgress(total) {
+                document.getElementById('subjects-progress').textContent = `0 of ${total} completed`;
+            }
+
+            // Calculate grade points based on marks
+            function calculateGradePoints(marks) {
+                if (marks >= 90) return { points: 10, grade: 'O' };
+                else if (marks >= 80) return { points: 9, grade: 'A+' };
+                else if (marks >= 70) return { points: 8, grade: 'A' };
+                else if (marks >= 60) return { points: 7, grade: 'B+' };
+                else if (marks >= 50) return { points: 6, grade: 'B' };
+                else if (marks >= 40) return { points: 5, grade: 'C' };
+                else if (marks >= 30) return { points: 4, grade: 'D' };
+                else if (marks >= 20) return { points: 3, grade: 'E' };
+                else if (marks >= 10) return { points: 2, grade: 'F' };
+                else return { points: 1, grade: 'F' };
+            }
+
+            // Calculate results and move to stage 3
+            window.calculateResults = function() {
+                const numSubjects = document.querySelectorAll('#dynamic-subjects > div').length;
+                studentData.subjects = [];
+                
+                let isValid = true;
+                
+                for (let i = 1; i <= numSubjects; i++) {
+                    const name = document.getElementById(`subject-name-${i}`).value.trim();
+                    const marks = parseInt(document.getElementById(`subject-marks-${i}`).value);
+                    const credits = parseInt(document.getElementById(`subject-credits-${i}`).value);
+                    
+                    if (!name || isNaN(marks) || isNaN(credits) || marks < 0 || marks > 100 || credits < 1) {
+                        isValid = false;
+                        break;
+                    }
+                    
+                    const gradeData = calculateGradePoints(marks);
+                    studentData.subjects.push({
+                        name,
+                        marks,
+                        credits,
+                        gradePoints: gradeData.points,
+                        grade: gradeData.grade
+                    });
+                }
+                
+                if (!isValid) {
+                    alert('Please fill in all subject details with valid values.');
+                    return;
+                }
+                
+                displayResults();
+                nextStage();
+            };
+
+            // Display results table
+            function displayResults() {
+                const tableBody = document.getElementById('results-table-body');
+                tableBody.innerHTML = '';
+                
+                let totalCredits = 0;
+                let totalEarnedCredits = 0;
+                
+                studentData.subjects.forEach(subject => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50';
+                    
+                    const earnedCredits = subject.gradePoints * subject.credits;
+                    totalCredits += subject.credits;
+                    totalEarnedCredits += earnedCredits;
+                    
+                    row.innerHTML = `
+                        <td class="border border-gray-200 px-4 py-3 font-medium">${subject.name}</td>
+                        <td class="border border-gray-200 px-4 py-3 text-center">${subject.marks}</td>
+                        <td class="border border-gray-200 px-4 py-3 text-center">${subject.credits}</td>
+                        <td class="border border-gray-200 px-4 py-3 text-center font-semibold text-primary">${subject.gradePoints}</td>
+                        <td class="border border-gray-200 px-4 py-3 text-center">
+                            <span class="inline-block bg-primary text-white px-2 py-1 rounded text-sm font-medium">${subject.grade}</span>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+                
+                document.getElementById('total-credits').textContent = totalCredits;
+                document.getElementById('total-grade-points').textContent = totalEarnedCredits;
+                
+                const sgpa = totalCredits > 0 ? (totalEarnedCredits / totalCredits) : 0;
+                studentData.sgpa = sgpa;
+                studentData.totalCredits = totalCredits;
+                studentData.totalEarnedCredits = totalEarnedCredits;
+            }
+
+            // Display final results with motivation
+            window.showFinalResults = function() {
+                const sgpa = studentData.sgpa;
+                
+                document.getElementById('final-sgpa').textContent = sgpa.toFixed(2);
+                document.getElementById('summary-name').textContent = studentData.name;
+                document.getElementById('summary-subjects').textContent = studentData.subjects.length;
+                document.getElementById('summary-credits').textContent = studentData.totalCredits;
+                document.getElementById('summary-points').textContent = studentData.totalEarnedCredits;
+                
+                // Set motivation message based on SGPA
+                let motivation = getMotivationMessage(sgpa);
+                document.getElementById('motivation-emoji').textContent = motivation.emoji;
+                document.getElementById('motivation-title').textContent = motivation.title;
+                document.getElementById('motivation-message').textContent = motivation.message;
+                
+                // Update card color based on performance
+                const card = document.getElementById('motivation-card');
+                card.className = `border-l-4 ${motivation.borderColor} ${motivation.bgColor} p-6 rounded-r-xl mb-8`;
+            };
+
+            function getMotivationMessage(sgpa) {
+                if (sgpa >= 9.5) {
+                    return {
+                        emoji: '🌟',
+                        title: 'Outstanding!',
+                        message: "You're on the path to excellence. Keep pushing boundaries — you're among the top achievers! 🚀",
+                        borderColor: 'border-yellow-400',
+                        bgColor: 'bg-yellow-50'
+                    };
+                } else if (sgpa >= 9.0) {
+                    return {
+                        emoji: '💪',
+                        title: 'Great Job!',
+                        message: "You've built a strong academic foundation. Stay consistent, and you'll soon be a topper! ✨",
+                        borderColor: 'border-green-400',
+                        bgColor: 'bg-green-50'
+                    };
+                } else if (sgpa >= 8.5) {
+                    return {
+                        emoji: '🔥',
+                        title: 'Very Good!',
+                        message: "Solid performance! With just a bit more effort, you'll break into the top tier. Keep going! 📈",
+                        borderColor: 'border-blue-400',
+                        bgColor: 'bg-blue-50'
+                    };
+                } else if (sgpa >= 8.0) {
+                    return {
+                        emoji: '🧠',
+                        title: 'Good Work!',
+                        message: "You're doing well — a little more focus and discipline can take you far. Stay steady and aim high! 🎯",
+                        borderColor: 'border-indigo-400',
+                        bgColor: 'bg-indigo-50'
+                    };
+                } else if (sgpa >= 7.0) {
+                    return {
+                        emoji: '📘',
+                        title: 'Fair Performance',
+                        message: "You've got the potential — now it's time to sharpen your focus and aim higher. You can do it! 💡",
+                        borderColor: 'border-purple-400',
+                        bgColor: 'bg-purple-50'
+                    };
+                } else if (sgpa >= 6.0) {
+                    return {
+                        emoji: '🌱',
+                        title: 'Needs Improvement',
+                        message: "Don't lose hope — this is your chance to bounce back stronger. Start fresh, aim higher! 💥",
+                        borderColor: 'border-orange-400',
+                        bgColor: 'bg-orange-50'
+                    };
+                } else {
+                    return {
+                        emoji: '❤️',
+                        title: "Don't Give Up",
+                        message: "Numbers don't define you. Learn from mistakes, rise with determination, and rewrite your story! 🔁",
+                        borderColor: 'border-red-400',
+                        bgColor: 'bg-red-50'
+                    };
+                }
+            }
+
+            // Start over functionality
+            window.startOver = function() {
+                currentStage = 1;
+                studentData = { name: '', gender: '', subjects: [] };
+                
+                // Reset forms
+                document.getElementById('student-name').value = '';
+                document.querySelectorAll('input[name="gender"]').forEach(radio => radio.checked = false);
+                document.getElementById('num-subjects').value = '';
+                document.getElementById('subjects-count-section').classList.remove('hidden');
+                document.getElementById('subjects-container').classList.add('hidden');
+                document.getElementById('dynamic-subjects').innerHTML = '';
+                
+                updateStageDisplay();
+            };
+
+            // Override nextStage for stage 3 to 4 transition
+            const originalNextStage = window.nextStage;
+            window.nextStage = function() {
+                if (currentStage === 3) {
+                    showFinalResults();
+                }
+                originalNextStage();
+            };
+        })();
+    </script>
+</body>
+</html>
